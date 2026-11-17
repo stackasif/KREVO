@@ -9,6 +9,10 @@ const benefits = [
     description:
       "Find creators based on your niche, campaign goals, content style, and audience relevance instead of scrolling through endless profiles.",
     proof: "Relevant creator discovery",
+    image:
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=85",
+    imageAlt: "Content creator posing for a lifestyle brand photoshoot",
+    imageLabel: "Creator discovery",
   },
   {
     number: "02",
@@ -16,6 +20,10 @@ const benefits = [
     description:
       "Keep your brief, creator selection, collaboration details, and content progress organised in one clear campaign workflow.",
     proof: "A more organised workflow",
+    image:
+      "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=85",
+    imageAlt: "Creative team planning a campaign around a table",
+    imageLabel: "Campaign workspace",
   },
   {
     number: "03",
@@ -23,6 +31,10 @@ const benefits = [
     description:
       "Know what has been agreed, what content is expected, and where each collaboration stands throughout the campaign.",
     proof: "Transparent campaign progress",
+    image:
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=85",
+    imageAlt: "Team members discussing and reviewing project progress",
+    imageLabel: "Collaboration progress",
   },
   {
     number: "04",
@@ -30,6 +42,10 @@ const benefits = [
     description:
       "Work with creators who understand their communities and create content that feels natural to the platforms where people discover brands.",
     proof: "Creator-led storytelling",
+    image:
+      "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1000&q=85",
+    imageAlt: "Creative content production setup",
+    imageLabel: "Authentic content",
   },
 ];
 
@@ -82,7 +98,11 @@ export default function WhyChooseKrevo() {
             initial={reduceMotion ? false : { opacity: 0, y: 22 }}
             whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.7,
+              delay: 0.12,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             Creator collaborations should move your brand forward, not add
             more complexity to your day. KREVO brings the key parts of the
@@ -91,7 +111,7 @@ export default function WhyChooseKrevo() {
         </div>
 
         <motion.div
-          className="mt-12 grid gap-4 md:grid-cols-2"
+          className="mt-12 grid gap-5 md:grid-cols-2"
           variants={cardContainer}
           initial={reduceMotion ? false : "hidden"}
           whileInView={reduceMotion ? undefined : "visible"}
@@ -101,27 +121,38 @@ export default function WhyChooseKrevo() {
             <motion.article
               key={benefit.number}
               variants={reduceMotion ? undefined : cardItem}
-              className="flex min-h-[250px] flex-col rounded-2xl border border-[#B8B4A9] bg-[#eceae2] p-6 sm:p-8"
+              className="flex min-h-[430px] flex-col overflow-hidden rounded-2xl border border-[#B8B4A9] bg-[#eceae2]"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold tracking-[0.18em] text-[#777267]">
+              <div className="relative h-52 overflow-hidden bg-[#D8D5CC] sm:h-60">
+                <img
+                  src={benefit.image}
+                  alt={benefit.imageAlt}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out hover:scale-[1.04]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#22201E]/45 via-transparent to-transparent" />
+                <span className="absolute bottom-4 left-5 rounded-full border border-white/40 bg-[#22201E]/45 px-3 py-1.5 text-[11px] font-semibold tracking-wide text-white backdrop-blur-sm">
+                  {benefit.imageLabel}
+                </span>
+                <span className="absolute right-5 top-4 text-xs font-semibold tracking-[0.18em] text-white drop-shadow">
                   {benefit.number}
                 </span>
-                <span className="h-px w-12 bg-[#B8B4A9]" />
               </div>
 
-              <h3 className="mt-8 max-w-md text-xl font-semibold leading-snug sm:text-2xl">
-                {benefit.title}
-              </h3>
+              <div className="flex flex-1 flex-col p-6 sm:p-8">
+                <h3 className="max-w-md text-xl font-semibold leading-snug sm:text-2xl">
+                  {benefit.title}
+                </h3>
 
-              <p className="mt-3 max-w-lg text-sm leading-6 text-[#625F57]">
-                {benefit.description}
-              </p>
-
-              <div className="mt-auto border-t border-[#B8B4A9] pt-4">
-                <p className="text-xs font-medium text-[#4F4B43]">
-                  {benefit.proof}
+                <p className="mt-3 max-w-lg text-sm leading-6 text-[#625F57]">
+                  {benefit.description}
                 </p>
+
+                <div className="mt-auto border-t border-[#B8B4A9] pt-4">
+                  <p className="text-xs font-medium text-[#4F4B43]">
+                    {benefit.proof}
+                  </p>
+                </div>
               </div>
             </motion.article>
           ))}
@@ -132,7 +163,10 @@ export default function WhyChooseKrevo() {
           initial={reduceMotion ? false : { opacity: 0, y: 28 }}
           whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          transition={{
+            duration: 0.75,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#B8B4A9]">

@@ -107,7 +107,7 @@ export default function CreatorMarketplace() {
                 playsInline
                 preload="metadata"
                 className="absolute inset-0 h-full w-full object-cover"
-                src="https://assets.mixkit.co/videos/preview/mixkit-young-woman-scrolling-through-content-on-a-tablet-41249-large.mp4"
+                src="/videos/creator-marketplace-demo.mp4"
               />
 
               {/* Dark Overlay */}

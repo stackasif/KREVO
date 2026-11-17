@@ -16,11 +16,16 @@ export default function Home() {
       <Navbar />
       <Hero />
       <CreatorStories/>
+
       <WorkflowSection/>
-      <CreatorDiscovery/>
-      <HowItWorks/>
       <CreatorMarketplace/>
+
+      <CreatorDiscovery/>
+
       <WhyChooseKrevo/>
+
+      <HowItWorks/>
+
       <Testimonials/>
       <FinalCTA/>
       <FAQSection/>
