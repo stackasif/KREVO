@@ -1,3 +1,7 @@
+"use client";
+
+
+import { motion, useReducedMotion } from "motion/react";
 
 import {
   Camera,
@@ -12,16 +16,13 @@ import {
 } from "lucide-react";
 
 
-
-
-
 const creatorVideos = [
   {
     username: "@glowbyclaire",
     caption: "Obsessed with this morning routine glow ✨ #skincare",
     likes: "24.8k",
     comments: "412",
-    video: "https://www.pexels.com/download/video/8360178/",
+    video: "/videos/creator/1.mp4",
     accent: "text-pink-400",
     liked: true,
   },
@@ -30,7 +31,7 @@ const creatorVideos = [
     caption: "Pre-workout setup done right 💪 #fitness",
     likes: "18.2k",
     comments: "188",
-    video: "https://www.pexels.com/download/video/6342208/",
+    video: "/videos/creator/2.mp4",
     accent: "text-teal-400",
     liked: false,
   },
@@ -39,7 +40,7 @@ const creatorVideos = [
     caption: "Unboxing the new matte series! 📦 #unboxing",
     likes: "49.1k",
     comments: "920",
-    video: "https://www.pexels.com/download/video/13929670/",
+    video: "/videos/creator/3.mp4",
     accent: "text-amber-400",
     liked: true,
   },
@@ -48,7 +49,7 @@ const creatorVideos = [
     caption: "3 ways to style your weekend outfit 🍂 #fashion",
     likes: "31.4k",
     comments: "623",
-    video: "https://www.pexels.com/download/video/6944164/",
+    video: "/videos/creator/4.mp4",
     accent: "text-purple-400",
     liked: true,
   },
@@ -57,7 +58,7 @@ const creatorVideos = [
     caption: "Morning cold brew that changed everything ☕ #coffee",
     likes: "15.9k",
     comments: "294",
-    video: "https://www.pexels.com/download/video/7581331/",
+    video: "/videos/creator/5.mp4",
     accent: "text-emerald-400",
     liked: false,
   },
@@ -66,7 +67,7 @@ const creatorVideos = [
     caption: "Travel essentials I can't live without ✈️ #travel",
     likes: "62.8k",
     comments: "1.1k",
-    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    video: "/videos/creator/6.mp4",
     accent: "text-sky-400",
     liked: true,
   },
@@ -75,7 +76,7 @@ const creatorVideos = [
     caption: "My favourite beauty product this month 🌸",
     likes: "28.3k",
     comments: "340",
-    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    video: "/videos/creator/7.mp4",
     accent: "text-rose-400",
     liked: false,
   },
@@ -84,88 +85,88 @@ const creatorVideos = [
     caption: "Why didn't I discover this sooner?! 🤯",
     likes: "45.7k",
     comments: "819",
-    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    video: "/videos/creator/8.mp4",
     accent: "text-yellow-400",
     liked: true,
   },
-//   {
-//     username: "@the.skin.diary",
-//     caption: "My everyday skincare essentials ✨",
-//     likes: "32.5k",
-//     comments: "521",
-//     video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-//     accent: "text-pink-400",
-//     liked: false,
-//   },
-//   {
-//     username: "@fitwithalex",
-//     caption: "A simple workout routine that works 💪",
-//     likes: "21.6k",
-//     comments: "305",
-//     video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-//     accent: "text-teal-400",
-//     liked: true,
-//   },
-//   {
-//     username: "@nina.creates",
-//     caption: "Unboxing my latest favourite gadget 📦",
-//     likes: "51.2k",
-//     comments: "760",
-//     video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-//     accent: "text-amber-400",
-//     liked: false,
-//   },
-//   {
-//     username: "@styledbyemma",
-//     caption: "Everyday outfit inspiration for you 🍂",
-//     likes: "29.4k",
-//     comments: "487",
-//     video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4",
-//     accent: "text-purple-400",
-//     liked: true,
-//   },
-//   {
-//     username: "@coffee.with.sam",
-//     caption: "Making the perfect iced coffee at home ☕",
-//     likes: "17.3k",
-//     comments: "251",
-//     video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
-//     accent: "text-emerald-400",
-//     liked: false,
-//   },
-//   {
-//     username: "@explorewithmia",
-//     caption: "A little adventure and a lot of memories ✈️",
-//     likes: "68.1k",
-//     comments: "1.3k",
-//     video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-//     accent: "text-sky-400",
-//     liked: true,
-//   },
-//   {
-//     username: "@beautybylily",
-//     caption: "Testing my new beauty favourites 🌸",
-//     likes: "35.7k",
-//     comments: "440",
-//     video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-//     accent: "text-rose-400",
-//     liked: false,
-//   },
-//   {
-//     username: "@smartliving",
-//     caption: "Little everyday hacks that save time 🤯",
-//     likes: "47.2k",
-//     comments: "905",
-//     video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-//     accent: "text-yellow-400",
-//     liked: true,
-//   },
+  {
+    username: "@the.skin.diary",
+    caption: "My everyday skincare essentials ✨",
+    likes: "32.5k",
+    comments: "521",
+    video: "/videos/creator/9.mp4",
+    accent: "text-pink-400",
+    liked: false,
+  },
+  {
+    username: "@fitwithalex",
+    caption: "A simple workout routine that works 💪",
+    likes: "21.6k",
+    comments: "305",
+    video: "/videos/creator/10.mp4",
+    accent: "text-teal-400",
+    liked: true,
+  },
+  {
+    username: "@nina.creates",
+    caption: "Unboxing my latest favourite gadget 📦",
+    likes: "51.2k",
+    comments: "760",
+    video: "/videos/creator/11.mp4",
+    accent: "text-amber-400",
+    liked: false,
+  },
+  {
+    username: "@styledbyemma",
+    caption: "Everyday outfit inspiration for you 🍂",
+    likes: "29.4k",
+    comments: "487",
+    video: "/videos/creator/1.mp4",
+    accent: "text-purple-400",
+    liked: true,
+  },
+  {
+    username: "@coffee.with.sam",
+    caption: "Making the perfect iced coffee at home ☕",
+    likes: "17.3k",
+    comments: "251",
+    video: "/videos/creator/2.mp4",
+    accent: "text-emerald-400",
+    liked: false,
+  },
+  {
+    username: "@explorewithmia",
+    caption: "A little adventure and a lot of memories ✈️",
+    likes: "68.1k",
+    comments: "1.3k",
+    video: "/videos/creator/3.mp4",
+    accent: "text-sky-400",
+    liked: true,
+  },
+  {
+    username: "@beautybylily",
+    caption: "Testing my new beauty favourites 🌸",
+    likes: "35.7k",
+    comments: "440",
+    video: "/videos/creator/4.mp4",
+    accent: "text-rose-400",
+    liked: false,
+  },
+  {
+    username: "@smartliving",
+    caption: "Little everyday hacks that save time 🤯",
+    likes: "47.2k",
+    comments: "905",
+    video: "/videos/creator/5.mp4",
+    accent: "text-yellow-400",
+    liked: true,
+  },
   {
     username: "@glowwithsarah",
     caption: "A fresh look for your daily routine ✨",
     likes: "26.9k",
     comments: "390",
-    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+    video: "/videos/creator/6.mp4",
     accent: "text-pink-400",
     liked: true,
   },
@@ -174,7 +175,7 @@ const creatorVideos = [
     caption: "Consistency is the real secret to fitness 💪",
     likes: "19.8k",
     comments: "276",
-    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+    video: "/videos/creator/7.mp4",
     accent: "text-teal-400",
     liked: false,
   },
@@ -183,7 +184,7 @@ const creatorVideos = [
     caption: "First impressions of my latest purchase 📦",
     likes: "42.6k",
     comments: "718",
-    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    video: "/videos/creator/8.mp4",
     accent: "text-amber-400",
     liked: true,
   },
@@ -192,7 +193,7 @@ const creatorVideos = [
     caption: "Your next outfit inspiration starts here 🍂",
     likes: "38.2k",
     comments: "590",
-    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4",
+    video: "/videos/creator/9.mp4",
     accent: "text-purple-400",
     liked: false,
   },
@@ -201,7 +202,7 @@ const creatorVideos = [
     caption: "Collecting moments, not things ✈️",
     likes: "73.5k",
     comments: "1.5k",
-    video: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    video: "/videos/creator/10.mp4",
     accent: "text-sky-400",
     liked: true,
   },
@@ -219,7 +220,7 @@ function CreatorCard({ creator }) {
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         />
 
 
@@ -313,23 +314,63 @@ function CreatorCardGroup() {
 }
 
 export default function CreatorStories() {
+  const reduceMotion = useReducedMotion();
+
+  const revealTransition = {
+    duration: reduceMotion ? 0.2 : 0.75,
+    ease: [0.22, 1, 0.36, 1],
+  };
+
   return (
     <section className="relative flex w-full flex-col items-center overflow-hidden bg-[#E6E3D6] py-10 sm:py-14">
       {/* Section heading */}
-      <div className="mb-8 max-w-2xl px-4 text-center">
-        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#22201E]/10 bg-[#22201E]/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#22201E]">
+      <motion.div
+        className="mb-8 max-w-2xl px-4 text-center"
+        initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.35 }}
+        transition={revealTransition}
+      >
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            ...revealTransition,
+            delay: reduceMotion ? 0 : 0.05,
+          }}
+          className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#22201E]/10 bg-[#22201E]/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#22201E]"
+        >
           <Camera size={14} />
           <span>Creator Stories & Reviews</span>
-        </div>
+        </motion.div>
 
-        <h2 className="text-2xl font-bold tracking-tight text-[#22201E] sm:text-3xl lg:text-4xl">
+        <motion.h2
+          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            ...revealTransition,
+            delay: reduceMotion ? 0 : 0.12,
+          }}
+          className="text-2xl font-bold tracking-tight text-[#22201E] sm:text-3xl lg:text-4xl"
+        >
           Real People. Real Results.
-        </h2>
+        </motion.h2>
 
-        <p className="mt-2 text-sm text-[#22201E]/65 sm:text-base">
+        <motion.p
+          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            ...revealTransition,
+            delay: reduceMotion ? 0 : 0.2,
+          }}
+          className="mt-2 text-sm text-[#22201E]/65 sm:text-base"
+        >
           See how creators bring brands to life through authentic content.
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
 
       {/* Infinite sliding carousel */}
       <div className="group/slider relative w-full overflow-hidden">
@@ -339,10 +380,21 @@ export default function CreatorStories() {
         {/* Right fade */}
         <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-20 w-10 bg-gradient-to-l from-[#E6E3D6] to-transparent sm:w-20 md:w-32" />
 
-        <div className="creator-marquee flex w-max gap-0 px-2">
-          <CreatorCardGroup />
-          <CreatorCardGroup />
-        </div>
+        {/* Reveal the carousel wrapper without changing its CSS marquee transform */}
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{
+            ...revealTransition,
+            delay: reduceMotion ? 0 : 0.12,
+          }}
+        >
+          <div className="creator-marquee flex w-max gap-0 px-2">
+            <CreatorCardGroup />
+            <CreatorCardGroup />
+          </div>
+        </motion.div>
       </div>
 
     </section>

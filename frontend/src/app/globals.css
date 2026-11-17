@@ -140,3 +140,35 @@ body {
 }
 
 
+/* Smooth Infinite Creator Carousel */
+
+@keyframes creator-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.creator-marquee {
+  display: flex;
+  width: max-content;
+  animation: creator-marquee 55s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Pause only when user intentionally hovers */
+.group\/slider:hover .creator-marquee {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creator-marquee {
+    animation: none;
+    will-change: auto;
+  }
+}
+

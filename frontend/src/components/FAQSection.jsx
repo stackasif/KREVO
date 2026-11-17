@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const faqs = [
   {
@@ -41,11 +42,33 @@ const faqs = [
   },
 ];
 
-function FAQItem({ faq, isOpen, onToggle }) {
+const cardContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const cardItem = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+function FAQItem({ faq, isOpen, onToggle, reduceMotion }) {
   const answerId = `faq-answer-${faq.id}`;
 
   return (
-    <article className="rounded-2xl bg-[#eceae2] px-5 py-5 transition-colors duration-200 hover:bg-[#e9e6dc] sm:px-7 sm:py-6">
+    <motion.article
+      variants={cardItem}
+      className="rounded-2xl bg-[#eceae2] px-5 py-5 transition-colors duration-200 hover:bg-[#e9e6dc] sm:px-7 sm:py-6"
+    >
       <button
         type="button"
         onClick={onToggle}
@@ -57,29 +80,42 @@ function FAQItem({ faq, isOpen, onToggle }) {
           {faq.question}
         </span>
 
-        <span
+        <motion.span
           aria-hidden="true"
-          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#22201E] text-xl font-normal leading-none text-[#E6E3D6] transition-transform duration-200 ${
-            isOpen ? "rotate-45" : ""
-          }`}
+          animate={{ rotate: isOpen ? 45 : 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.2, ease: "easeInOut" }}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#22201E] text-xl font-normal leading-none text-[#E6E3D6]"
         >
           +
-        </span>
+        </motion.span>
       </button>
 
-      <div
-        id={answerId}
-        hidden={!isOpen}
-        className="max-w-3xl pr-2 pt-4 text-sm leading-7 text-[#625F57] sm:pr-12 sm:text-[15px]"
-      >
-        {faq.answer}
-      </div>
-    </article>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            id={answerId}
+            key="answer"
+            role="region"
+            aria-labelledby={`faq-question-${faq.id}`}
+            initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <p className="max-w-3xl pr-2 pt-4 text-sm leading-7 text-[#625F57] sm:pr-12 sm:text-[15px]">
+              {faq.answer}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.article>
   );
 }
 
 export default function FAQSection() {
   const [openId, setOpenId] = useState(1);
+  const reduceMotion = useReducedMotion();
 
   function toggleFAQ(id) {
     setOpenId((currentId) => (currentId === id ? null : id));
@@ -91,7 +127,13 @@ export default function FAQSection() {
       className="bg-[#E6E3D6] py-20 text-[#22201E] sm:py-24"
     >
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 text-center sm:mb-12">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-10 text-center sm:mb-12"
+        >
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#777267]">
             Need to know
           </p>
@@ -107,20 +149,33 @@ export default function FAQSection() {
             Find answers to common questions about discovering creators and
             managing campaigns with KREVO.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col gap-3 sm:gap-4">
+        <motion.div
+          variants={cardContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.08 }}
+          className="flex flex-col gap-3 sm:gap-4"
+        >
           {faqs.map((faq) => (
             <FAQItem
               key={faq.id}
               faq={faq}
               isOpen={openId === faq.id}
               onToggle={() => toggleFAQ(faq.id)}
+              reduceMotion={reduceMotion}
             />
           ))}
-        </div>
+        </motion.div>
 
-        <div className="mt-10 flex justify-center sm:mt-12">
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-10 flex justify-center sm:mt-12"
+        >
           <a
             href="#"
             className="inline-flex items-center justify-center rounded-full bg-[#22201E] px-7 py-3.5 text-sm font-semibold text-[#E6E3D6] transition-colors duration-200 hover:bg-[#3A3732]"
@@ -130,7 +185,7 @@ export default function FAQSection() {
               →
             </span>
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

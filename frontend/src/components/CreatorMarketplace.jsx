@@ -1,5 +1,10 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
 
 export default function CreatorMarketplace() {
+  const reduceMotion = useReducedMotion();
+
   const featureCards = [
     {
       number: "01",
@@ -39,12 +44,39 @@ export default function CreatorMarketplace() {
     },
   ];
 
+  const reveal = {
+    hidden: { opacity: 0, y: 22 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.65,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
+  const stagger = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.06,
+      },
+    },
+  };
+
   return (
     <section className="w-full bg-[#E6E3D6] px-4 py-14 text-[#22201E] sm:px-6 md:py-20 lg:px-8">
       <div className="mx-auto max-w-7xl">
-
         {/* Section Heading */}
-        <div className="mb-10 text-center md:mb-12">
+        <motion.div
+          className="mb-10 text-center md:mb-12"
+          variants={reveal}
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? undefined : "visible"}
+          viewport={{ once: true, amount: 0.25 }}
+        >
           <span className="mb-3 block text-[10px] font-semibold uppercase tracking-[0.18em] text-[#22201E]/60 sm:text-xs">
             Creator Marketplace
           </span>
@@ -52,15 +84,22 @@ export default function CreatorMarketplace() {
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
             Find and Hire Creators Instantly
           </h2>
-        </div>
+        </motion.div>
 
         {/* Main Layout */}
         <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-12 lg:gap-6">
-
           {/* Responsive Video Panel */}
-          <div className="w-full min-w-0 lg:col-span-7">
+          <motion.div
+            className="w-full min-w-0 lg:col-span-7"
+            initial={reduceMotion ? false : { opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.75,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
             <div className="group relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#eceae2] sm:aspect-[16/10] md:rounded-3xl lg:aspect-auto lg:min-h-[500px] lg:h-full">
-
               <video
                 autoPlay
                 loop
@@ -76,7 +115,6 @@ export default function CreatorMarketplace() {
 
               {/* Top Labels */}
               <div className="pointer-events-none absolute left-3 right-3 top-3 z-10 flex items-center justify-between gap-2 sm:left-4 sm:right-4 sm:top-4">
-
                 <div className="max-w-[65%] truncate rounded-lg bg-[#eceae2]/95 px-3 py-2 text-[10px] font-semibold text-[#22201E] sm:text-xs">
                   Live Creator Discovery
                 </div>
@@ -84,12 +122,10 @@ export default function CreatorMarketplace() {
                 <div className="hidden rounded-lg bg-[#22201E]/75 px-3 py-2 text-[10px] font-medium text-white sm:block sm:text-xs">
                   1,300+ Online Now
                 </div>
-
               </div>
 
               {/* Category Labels */}
               <div className="pointer-events-none absolute left-3 top-14 z-10 hidden flex-wrap gap-2 sm:left-4 sm:flex">
-
                 <span className="rounded-md bg-[#eceae2]/90 px-2.5 py-1 text-[10px] font-semibold text-[#22201E]">
                   Beauty & Skincare
                 </span>
@@ -101,12 +137,10 @@ export default function CreatorMarketplace() {
                 <span className="rounded-md bg-[#eceae2]/90 px-2.5 py-1 text-[10px] font-semibold text-[#22201E]">
                   Vetted
                 </span>
-
               </div>
 
               {/* Bottom Information */}
               <div className="pointer-events-none absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between gap-2 rounded-xl bg-[#eceae2]/95 p-3 sm:bottom-4 sm:left-4 sm:right-4 sm:gap-3 sm:p-3.5">
-
                 <div className="min-w-0">
                   <p className="truncate text-[11px] font-bold leading-tight text-[#22201E] sm:text-sm">
                     Interactive Platform Demo
@@ -120,21 +154,25 @@ export default function CreatorMarketplace() {
                 <span className="shrink-0 rounded-md bg-[#22201E] px-2 py-1.5 text-[8px] font-semibold text-[#eceae2] sm:px-2.5 sm:text-[10px]">
                   Active Marketplace
                 </span>
-
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Feature Cards */}
-          <div className="flex min-w-0 flex-col gap-4 lg:col-span-5 lg:justify-between">
-
+          <motion.div
+            className="flex min-w-0 flex-col gap-4 lg:col-span-5 lg:justify-between"
+            variants={reduceMotion ? undefined : stagger}
+            initial={reduceMotion ? false : "hidden"}
+            whileInView={reduceMotion ? undefined : "visible"}
+            viewport={{ once: true, amount: 0.12 }}
+          >
             {featureCards.map((card) => (
-              <article
+              <motion.article
                 key={card.number}
+                variants={reduceMotion ? undefined : reveal}
                 className="rounded-2xl bg-[#eceae2] p-5 transition-colors duration-200 hover:bg-[#e9e6dc] md:rounded-3xl md:p-6"
               >
                 <div className="mb-2 flex items-start justify-between gap-3">
-
                   <h3 className="text-base font-bold leading-snug text-[#22201E] sm:text-lg">
                     {card.title}
                   </h3>
@@ -142,24 +180,28 @@ export default function CreatorMarketplace() {
                   <span className="shrink-0 rounded-full bg-[#E1DED4] px-2.5 py-1 font-mono text-[10px] font-semibold text-[#22201E]/60">
                     {card.number}
                   </span>
-
                 </div>
 
                 <p className="text-xs leading-relaxed text-[#22201E]/75 sm:text-sm">
                   {card.description}
                 </p>
-              </article>
+              </motion.article>
             ))}
-
-          </div>
+          </motion.div>
         </div>
 
         {/* Bottom Feature Cards */}
-        <div className="mt-5 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-3">
-
+        <motion.div
+          className="mt-5 grid grid-cols-1 gap-4 md:mt-6 md:grid-cols-3"
+          variants={reduceMotion ? undefined : stagger}
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? undefined : "visible"}
+          viewport={{ once: true, amount: 0.12 }}
+        >
           {bottomFeatures.map((feature) => (
-            <article
+            <motion.article
               key={feature.title}
+              variants={reduceMotion ? undefined : reveal}
               className="rounded-2xl bg-[#eceae2] p-5 transition-colors duration-200 hover:bg-[#e9e6dc] md:p-6"
             >
               <h3 className="mb-2 text-sm font-bold text-[#22201E] sm:text-base">
@@ -169,10 +211,9 @@ export default function CreatorMarketplace() {
               <p className="text-xs leading-relaxed text-[#22201E]/70 sm:text-sm">
                 {feature.description}
               </p>
-            </article>
+            </motion.article>
           ))}
-
-        </div>
+        </motion.div>
       </div>
     </section>
   );

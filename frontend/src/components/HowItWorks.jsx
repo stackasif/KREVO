@@ -1,3 +1,29 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+
+const cardContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.14,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const cardItemVariants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 const steps = [
   {
     number: "01",
@@ -35,7 +61,10 @@ const steps = [
 
 function StepCard({ step }) {
   return (
-    <article className="rounded-2xl border border-[#B8B4A9] bg-[#eceae2] p-5 sm:p-6">
+    <motion.article
+      variants={cardItemVariants}
+      className="h-full rounded-2xl border border-[#B8B4A9] bg-[#eceae2] p-5 sm:p-6"
+    >
       <div className="mb-5 flex items-center justify-between">
         <span className="text-xs font-semibold tracking-[0.18em] text-[#6E6A60]">
           STEP {step.number}
@@ -66,16 +95,26 @@ function StepCard({ step }) {
           ))}
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
 export default function HowItWorks() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="bg-[#E6E3D6] py-20 text-[#22201E] sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
-          <div>
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.7,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#777267]">
               How it works
             </p>
@@ -83,24 +122,52 @@ export default function HowItWorks() {
             <h2 className="mt-4 max-w-xl text-3xl font-semibold leading-[1.12] tracking-tight sm:text-4xl lg:text-5xl">
               From your brief to content that moves your brand.
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="lg:justify-self-end lg:pb-1">
+          <motion.div
+            className="lg:justify-self-end lg:pb-1"
+            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.65,
+              delay: reduceMotion ? 0 : 0.12,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
             <p className="max-w-xl text-sm leading-7 text-[#625F57] sm:text-base">
               Finding the right creators should feel simple. KREVO brings the
               campaign journey into one clear process, so you can move from an
               idea to creator-made content with confidence.
             </p>
-          </div>
+          </motion.div>
         </div>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {steps.map((step) => (
-            <StepCard key={step.number} step={step} />
+        <motion.div
+          className="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+          variants={reduceMotion ? undefined : cardContainerVariants}
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? undefined : "visible"}
+          viewport={{ once: true, amount: 0.08 }}
+        >
+          {steps.map((step, index) => (
+            <StepCard
+              key={step.number}
+              step={step}
+            />
           ))}
-        </div>
+        </motion.div>
 
-        <div className="mt-8 flex flex-col gap-5 rounded-2xl border border-[#B8B4A9] bg-[#22201E] px-6 py-7 text-[#E6E3D6] sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <motion.div
+          className="mt-8 flex flex-col gap-5 rounded-2xl border border-[#B8B4A9] bg-[#22201E] px-6 py-7 text-[#E6E3D6] sm:flex-row sm:items-center sm:justify-between sm:px-8"
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.08 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.65,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#B8B4A9]">
               Ready when you are
@@ -123,7 +190,7 @@ export default function HowItWorks() {
               →
             </span>
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

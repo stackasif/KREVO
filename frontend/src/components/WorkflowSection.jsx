@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const workflowData = [
   {
@@ -623,14 +624,19 @@ const previewComponents = [
 
 export default function WorkflowSection() {
   const [activeTab, setActiveTab] = useState(0);
+  const reduceMotion = useReducedMotion();
 
+  // Automatically move to the next tab every 4 seconds.
+  // Clicking a tab also restarts this timer.
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setActiveTab((current) => (current + 1) % workflowData.length);
     }, 4000);
 
-    return () => clearTimeout(timer);
+    return () => window.clearTimeout(timer);
   }, [activeTab]);
+
+
 
   // Fast Refresh can preserve an old tab index after tabs are removed.
   // Keep the index within the current six-tab range before reading arrays.
@@ -642,7 +648,16 @@ export default function WorkflowSection() {
     <section className="krevo-workflow w-full bg-[#E6E3D6] px-4 py-12 text-[#22201E] selection:bg-[#22201E] selection:text-white cursor-default [&_*]:!cursor-default sm:px-6 md:py-20 lg:px-8">
       <div className="mx-auto max-w-7xl">
         {/* Section heading */}
-        <div className="mb-10 text-center md:mb-14">
+        <motion.div
+          className="mb-10 text-center md:mb-14"
+          initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{
+            duration: reduceMotion ? 0.2 : 0.75,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
           <h2 className="mb-3 text-3xl font-extrabold tracking-tight text-[#22201E] sm:text-4xl lg:text-[46px]">
             Everything in One Workflow
           </h2>
@@ -651,10 +666,20 @@ export default function WorkflowSection() {
             Streamline your end-to-end UGC creator operations from initial
             discovery to real-time ROI tracking.
           </p>
-        </div>
+        </motion.div>
 
         {/* Navigation tabs */}
-        <div className="mb-8 flex justify-center md:mb-12">
+        <motion.div
+          className="mb-8 flex justify-center md:mb-12"
+          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{
+            duration: reduceMotion ? 0.2 : 0.65,
+            delay: reduceMotion ? 0 : 0.08,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
           <div className="no-scrollbar inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-full bg-[#22201E] p-1.5 shadow-xl sm:gap-1.5 sm:p-2">
             {workflowData.map((tab, index) => {
               const isActive = safeActiveTab === index;
@@ -686,15 +711,46 @@ export default function WorkflowSection() {
               );
             })}
           </div>
-        </div>
+        </motion.div>
 
         {/* Main workflow panel */}
-        <div className="relative flex min-h-[580px] items-center overflow-hidden rounded-[28px] bg-[#eceae2] p-6 shadow-lg transition-all duration-500 sm:rounded-[36px] sm:p-10 lg:min-h-[640px] lg:p-14">
+        <motion.div
+          layout
+          transition={{
+            layout: {
+              duration: reduceMotion ? 0 : 0.55,
+              ease: [0.22, 1, 0.36, 1],
+            },
+          }}
+          className="relative flex min-h-[580px] items-center overflow-hidden rounded-[28px] bg-[#eceae2] p-6 shadow-lg sm:rounded-[36px] sm:p-10 lg:min-h-[640px] lg:p-14"
+        >
 
-          <div
-            key={safeActiveTab}
-            className="relative z-10 grid w-full grid-cols-1 items-center gap-8 animate-workflow-fade-in lg:grid-cols-2 lg:gap-12"
-          >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={safeActiveTab}
+              initial={
+                reduceMotion
+                  ? { opacity: 1 }
+                  : { opacity: 0, y: 8 }
+              }
+              animate={{ opacity: 1, y: 0 }}
+              exit={
+                reduceMotion
+                  ? { opacity: 1 }
+                  : { opacity: 0, y: -3 }
+              }
+              transition={{
+                opacity: {
+                  duration: reduceMotion ? 0 : 0.28,
+                  ease: "easeOut",
+                },
+                y: {
+                  duration: reduceMotion ? 0 : 0.42,
+                  ease: [0.22, 1, 0.36, 1],
+                },
+              }}
+              className="relative z-10 grid w-full grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12"
+            >
             {/* Left content */}
             <div className="space-y-6 sm:space-y-7">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#eceae2]/70 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-[#22201E] shadow-sm backdrop-blur-sm">
@@ -727,8 +783,9 @@ export default function WorkflowSection() {
             <div className="pointer-events-none flex w-full cursor-default select-none items-center justify-center">
               <ActivePreview />
             </div>
-          </div>
-        </div>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const CATEGORIES = [
       {
@@ -383,12 +384,17 @@ const CATEGORIES = [
       }
     ];
 
-function CreatorCard({ creator, isAnimating }) {
+function CreatorCard({ creator, index, reduceMotion }) {
   return (
-    <article
-      className={`flex h-full flex-col overflow-hidden rounded-[22px] bg-[#eceae2] transition-all duration-300 ${
-        isAnimating ? "translate-y-2 opacity-0" : "translate-y-0 opacity-100"
-      }`}
+    <motion.article
+      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: reduceMotion ? 0 : 0.45,
+        delay: reduceMotion ? 0 : index * 0.07,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="flex h-full flex-col overflow-hidden rounded-[22px] bg-[#eceae2]"
     >
       <div className="aspect-[4/3] w-full overflow-hidden bg-[#d8d5ca]">
         <img
@@ -446,41 +452,13 @@ function CreatorCard({ creator, isAnimating }) {
           </p>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
 export default function CreatorDiscovery() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const tabRefs = useRef([]);
-  const animationTimeoutRef = useRef(null);
-
-  useEffect(() => {
-    const activeTab = tabRefs.current[activeIndex];
-
-    if (activeTab) {
-      activeTab.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
-    }
-  }, [activeIndex]);
-
-  useEffect(() => {
-    setIsAnimating(true);
-
-    animationTimeoutRef.current = window.setTimeout(() => {
-      setIsAnimating(false);
-    }, 180);
-
-    return () => {
-      if (animationTimeoutRef.current) {
-        window.clearTimeout(animationTimeoutRef.current);
-      }
-    };
-  }, [activeIndex]);
+  const reduceMotion = useReducedMotion();
 
   const handleCategoryChange = (index) => {
     if (index !== activeIndex) {
@@ -493,16 +471,35 @@ export default function CreatorDiscovery() {
   return (
     <section className="w-full py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-9 max-w-3xl text-center sm:mb-10">
+        <motion.div
+          className="mx-auto mb-9 max-w-3xl text-center sm:mb-10"
+          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.7,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
           <h2 className="mb-3 text-3xl font-bold tracking-tight text-[#22201E] sm:text-[34px]">
             Find Top Instagram Creators
           </h2>
           <p className="text-[15px] leading-relaxed text-[#625f57] sm:text-base">
             Discover talented Instagram creators who bring your brand to life through authentic content.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mb-10 flex justify-center sm:mb-12">
+        <motion.div
+          className="mb-10 flex justify-center sm:mb-12"
+          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.6,
+            delay: reduceMotion ? 0 : 0.08,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
           <div className="no-scrollbar flex max-w-full items-center gap-1 overflow-x-auto rounded-full bg-[#eceae2] p-1.5 sm:p-2">
             {CATEGORIES.map((category, index) => {
               const isActive = activeIndex === index;
@@ -510,41 +507,67 @@ export default function CreatorDiscovery() {
               return (
                 <button
                   key={category.id}
-                  ref={(element) => {
-                    tabRefs.current[index] = element;
-                  }}
                   type="button"
                   onClick={() => handleCategoryChange(index)}
                   aria-pressed={isActive}
-                  className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 text-[13px] font-semibold transition-colors sm:px-5 sm:text-sm ${
+                  className={`relative shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 text-[13px] font-semibold transition-colors sm:px-5 sm:text-sm ${
                     isActive
-                      ? "bg-[#22201E] text-[#E6E3D6]"
-                      : "text-[#625f57] hover:bg-[#dedbd0] hover:text-[#22201E]"
+                      ? "text-[#E6E3D6]"
+                      : "text-[#625f57] hover:text-[#22201E]"
                   }`}
                 >
-                  {category.name}
+                  {isActive && (
+                    <motion.span
+                      layoutId="creator-discovery-active-tab"
+                      className="absolute inset-0 rounded-full bg-[#22201E]"
+                      transition={{
+                        type: "spring",
+                        stiffness: 380,
+                        damping: 32,
+                      }}
+                    />
+                  )}
+                  <span className="relative z-10">{category.name}</span>
                 </button>
               );
             })}
           </div>
-        </div>
+        </motion.div>
 
-        <div
-          className={`grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 ${
-            isAnimating ? "pointer-events-none" : ""
-          }`}
-          aria-live="polite"
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={currentCategory.id}
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -6 }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.35,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            aria-live="polite"
+          >
+            {currentCategory.creators.map((creator, index) => (
+              <CreatorCard
+                key={creator.id}
+                creator={creator}
+                index={index}
+                reduceMotion={reduceMotion}
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        <motion.div
+          className="flex flex-col items-center justify-center pt-12 text-center"
+          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.6,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
-          {currentCategory.creators.map((creator) => (
-            <CreatorCard
-              key={creator.id}
-              creator={creator}
-              isAnimating={isAnimating}
-            />
-          ))}
-        </div>
-
-        <div className="flex flex-col items-center justify-center pt-12 text-center">
           <p className="mb-3 text-sm font-medium text-[#625f57]">
             Ready to get started?
           </p>
@@ -554,7 +577,7 @@ export default function CreatorDiscovery() {
           >
             Start Hiring
           </a>
-        </div>
+        </motion.div>
       </div>
 
       <style jsx>{`

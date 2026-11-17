@@ -1,3 +1,7 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+
 const benefits = [
   {
     number: "01",
@@ -29,12 +33,41 @@ const benefits = [
   },
 ];
 
+const cardContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.13,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const cardItem = {
+  hidden: { opacity: 0, y: 26 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 export default function WhyChooseKrevo() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="bg-[#E6E3D6] py-20 text-[#22201E] sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-          <div>
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#777267]">
               Why choose KREVO
             </p>
@@ -42,19 +75,32 @@ export default function WhyChooseKrevo() {
             <h2 className="mt-4 max-w-xl text-3xl font-semibold leading-[1.12] tracking-tight sm:text-4xl lg:text-5xl">
               Less time managing. More time creating.
             </h2>
-          </div>
+          </motion.div>
 
-          <p className="max-w-xl text-sm leading-7 text-[#625F57] sm:text-base lg:justify-self-end">
+          <motion.p
+            className="max-w-xl text-sm leading-7 text-[#625F57] sm:text-base lg:justify-self-end"
+            initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          >
             Creator collaborations should move your brand forward, not add
             more complexity to your day. KREVO brings the key parts of the
             process together so your team can focus on the work that matters.
-          </p>
+          </motion.p>
         </div>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-2">
+        <motion.div
+          className="mt-12 grid gap-4 md:grid-cols-2"
+          variants={cardContainer}
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? undefined : "visible"}
+          viewport={{ once: true, amount: 0.08 }}
+        >
           {benefits.map((benefit) => (
-            <article
+            <motion.article
               key={benefit.number}
+              variants={reduceMotion ? undefined : cardItem}
               className="flex min-h-[250px] flex-col rounded-2xl border border-[#B8B4A9] bg-[#eceae2] p-6 sm:p-8"
             >
               <div className="flex items-center justify-between">
@@ -77,11 +123,17 @@ export default function WhyChooseKrevo() {
                   {benefit.proof}
                 </p>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="mt-8 rounded-2xl border border-[#B8B4A9] bg-[#22201E] px-6 py-8 text-[#E6E3D6] sm:px-8 lg:flex lg:items-center lg:justify-between lg:gap-8">
+        <motion.div
+          className="mt-8 rounded-2xl border border-[#B8B4A9] bg-[#22201E] px-6 py-8 text-[#E6E3D6] sm:px-8 lg:flex lg:items-center lg:justify-between lg:gap-8"
+          initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#B8B4A9]">
               Built for better collaborations
@@ -95,7 +147,7 @@ export default function WhyChooseKrevo() {
             Bring your next campaign to KREVO and build a creator partnership
             around what your brand actually needs.
           </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

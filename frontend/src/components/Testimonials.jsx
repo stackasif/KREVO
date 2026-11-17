@@ -1,3 +1,7 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+
 const testimonials = [
   {
     quote:
@@ -31,31 +35,73 @@ const testimonials = [
   },
 ];
 
+const cardContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.14,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const cardItemVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
 export default function Testimonials() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="bg-[#E6E3D6] py-20 text-[#22201E] sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-          <div>
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          >
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#777267]">
               The KREVO experience
             </p>
             <h2 className="mt-4 max-w-xl text-3xl font-semibold leading-[1.12] tracking-tight sm:text-4xl lg:text-5xl">
               Better collaborations start with a better process.
             </h2>
-          </div>
+          </motion.div>
 
-          <p className="max-w-xl text-sm leading-7 text-[#625F57] sm:text-base lg:justify-self-end">
+          <motion.p
+            className="max-w-xl text-sm leading-7 text-[#625F57] sm:text-base lg:justify-self-end"
+            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.65, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+          >
             A good creator partnership needs clear expectations, organised
             communication, and content that serves the campaign. That is the
             experience KREVO is designed to support.
-          </p>
+          </motion.p>
         </div>
 
-        <div className="mt-12 grid gap-4 lg:grid-cols-3">
+        <motion.div
+          className="mt-12 grid gap-4 lg:grid-cols-3"
+          variants={cardContainerVariants}
+          initial={reduceMotion ? false : "hidden"}
+          whileInView={reduceMotion ? undefined : "visible"}
+          viewport={{ once: true, amount: 0.12 }}
+        >
           {testimonials.map((item, index) => (
-            <article
+            <motion.article
               key={item.type}
+              variants={cardItemVariants}
               className="flex min-h-[360px] flex-col rounded-2xl border border-[#B8B4A9] bg-[#eceae2] p-6 sm:p-7"
             >
               <div className="flex items-center justify-between">
@@ -81,11 +127,9 @@ export default function Testimonials() {
                   <p className="mt-0.5 text-xs text-[#777267]">{item.role}</p>
                 </div>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
-
-
+        </motion.div>
       </div>
     </section>
   );

@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { ChevronDown, Menu, X } from "lucide-react";
 
@@ -199,6 +200,7 @@ function MobileAccordion({
 // Main Navbar component
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
   const [openSection, setOpenSection] = useState(null);
 
   // Close mobile menu and reset accordion
@@ -225,7 +227,15 @@ function Navbar() {
       )}
 
       {/* Navbar header */}
-      <header className="w-full pt-6 md:pt-8 px-4 sm:px-6 lg:px-8 sticky top-0 z-50">
+      <motion.header
+        initial={reduceMotion ? false : { opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          duration: reduceMotion ? 0.15 : 0.7,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="w-full pt-6 md:pt-8 px-4 sm:px-6 lg:px-8 sticky top-0 z-50"
+      >
         <div className="max-w-[1280px] mx-auto relative">
           <nav
             className={`${glassNav} rounded-full h-[66px] px-6 sm:px-8 flex items-center justify-between transition-all duration-300 relative`}
@@ -321,11 +331,21 @@ function Navbar() {
           </nav>
 
           {/* Mobile dropdown menu */}
-          <div
-            className={`${glassMenu} absolute top-full left-0 right-0 md:hidden mt-3 rounded-3xl p-6 max-h-[75vh] overflow-y-auto transition-all duration-300 origin-top transform z-50 ${
+          <motion.div
+            initial={false}
+            animate={
               isOpen
-                ? "visible scale-100 opacity-100"
-                : "invisible scale-95 opacity-0 pointer-events-none"
+                ? { opacity: 1, y: 0, scale: 1 }
+                : { opacity: 0, y: reduceMotion ? 0 : -8, scale: reduceMotion ? 1 : 0.985 }
+            }
+            transition={{
+              duration: reduceMotion ? 0.12 : 0.28,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            style={{ pointerEvents: isOpen ? "auto" : "none" }}
+            aria-hidden={!isOpen}
+            className={`${glassMenu} absolute top-full left-0 right-0 md:hidden mt-3 rounded-3xl p-6 max-h-[75vh] overflow-y-auto origin-top z-50 ${
+              isOpen ? "" : "invisible"
             }`}
           >
             <div className="flex flex-col space-y-3">
@@ -386,9 +406,9 @@ function Navbar() {
                 </Link>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </header>
+      </motion.header>
     </>
   );
 }

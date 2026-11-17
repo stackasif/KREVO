@@ -1,11 +1,16 @@
 
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+
 const ArrowRight = () => (
   <svg
-    className="w-4 h-4 ml-2"
+    className="ml-2 h-4 w-4"
     fill="none"
     stroke="currentColor"
     strokeWidth="2.5"
     viewBox="0 0 24 24"
+    aria-hidden="true"
   >
     <path
       strokeLinecap="round"
@@ -17,9 +22,10 @@ const ArrowRight = () => (
 
 const CheckIcon = () => (
   <svg
-    className="w-4 h-4 text-[#22201E] shrink-0"
+    className="h-4 w-4 shrink-0 text-[#22201E]"
     fill="currentColor"
     viewBox="0 0 20 20"
+    aria-hidden="true"
   >
     <path
       fillRule="evenodd"
@@ -31,8 +37,9 @@ const CheckIcon = () => (
 
 const HeartIcon = () => (
   <svg
-    className="w-3 h-3 text-white fill-current"
+    className="h-3 w-3 fill-current text-white"
     viewBox="0 0 24 24"
+    aria-hidden="true"
   >
     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
   </svg>
@@ -40,18 +47,18 @@ const HeartIcon = () => (
 
 const VerifiedIcon = () => (
   <svg
-    className="w-3.5 h-3.5 text-blue-400 fill-current"
+    className="h-3.5 w-3.5 fill-current text-blue-400"
     viewBox="0 0 24 24"
+    aria-hidden="true"
   >
     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
   </svg>
 );
 
 // Reusable creator video card
-
-
 function CreatorVideoCard({
   position,
+  rotation,
   category,
   categoryColor,
   creatorName,
@@ -59,117 +66,190 @@ function CreatorVideoCard({
   performance,
   performanceColor,
   video,
+  delay,
+  reduceMotion,
 }) {
   return (
-    <div
-      className={`absolute ${position} w-[190px] sm:w-[230px] aspect-[9/16] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(34,32,30,0.18)] border-[3px] border-[#E6E3D6] bg-[#22201E] cursor-pointer transition-transform duration-300`}
+    <motion.div
+      className={`absolute ${position} w-[190px] sm:w-[230px]`}
+      initial={{
+        opacity: 0,
+        y: reduceMotion ? 0 : 25,
+        scale: reduceMotion ? 1 : 0.94,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+      }}
+      transition={{
+        duration: reduceMotion ? 0.2 : 0.85,
+        delay: reduceMotion ? 0 : delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
-      <video
-        className="w-full h-full object-cover"
-        src={video}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        disablePictureInPicture
-      />
+      <div
+        className={`group/card relative aspect-[9/16] overflow-hidden rounded-2xl border-[3px] border-[#E6E3D6] bg-[#22201E] shadow-[0_20px_50px_rgba(34,32,30,0.18)] transition-transform duration-500 sm:rounded-3xl ${rotation}`}
+      >
+        <video
+          className="h-full w-full object-cover"
+          src={video}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          disablePictureInPicture
+        />
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none flex flex-col justify-between p-3.5 sm:p-4 text-white">
-        <div className="flex items-center justify-between gap-2">
-          <span className="px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-white/20 backdrop-blur-md text-white border border-white/20 flex items-center gap-1.5">
-            <span className={`w-1.5 h-1.5 rounded-full ${categoryColor}`} />
-            {category}
-          </span>
-
-          <div className="w-6 h-6 shrink-0 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center">
-            <HeartIcon />
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="text-xs sm:text-sm font-bold tracking-tight text-white">
-              {creatorName}
+        <div className="pointer-events-none absolute inset-0 flex flex-col justify-between bg-gradient-to-t from-black/85 via-black/20 to-transparent p-3.5 text-white sm:p-4">
+          <div className="flex items-center justify-between gap-2">
+            <span className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/20 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-md sm:text-xs">
+              <span className={`h-1.5 w-1.5 rounded-full ${categoryColor}`} />
+              {category}
             </span>
-            <VerifiedIcon />
+
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-black/40 backdrop-blur-sm">
+              <HeartIcon />
+            </div>
           </div>
 
-          <div className="flex items-center justify-between gap-2 text-[10px] sm:text-xs text-white/80 font-medium">
-            <span>{creatorStats}</span>
-            <span className={`${performanceColor} font-semibold`}>
-              {performance}
-            </span>
+          <div>
+            <div className="mb-1 flex items-center gap-1.5">
+              <span className="text-xs font-bold tracking-tight text-white sm:text-sm">
+                {creatorName}
+              </span>
+              <VerifiedIcon />
+            </div>
+
+            <div className="flex items-center justify-between gap-2 text-[10px] font-medium text-white/80 sm:text-xs">
+              <span>{creatorStats}</span>
+              <span className={`${performanceColor} font-semibold`}>
+                {performance}
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-
-
 // Main Hero component
 function Hero() {
+  const reduceMotion = useReducedMotion();
+
+  const contentTransition = {
+    duration: reduceMotion ? 0.2 : 0.7,
+    ease: [0.22, 1, 0.36, 1],
+  };
+
+  const reveal = {
+    initial: {
+      opacity: 0,
+      y: reduceMotion ? 0 : 22,
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   return (
     <section
       id="hero"
-      className="w-full bg-[#E6E3D6] text-[#22201E] py-12 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-12 overflow-hidden"
+      className="w-full overflow-hidden bg-[#E6E3D6] px-4 py-12 text-[#22201E] sm:px-6 md:py-20 lg:px-12 lg:py-24"
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
 
         {/* Left column: Hero content */}
-        <div className="lg:col-span-7 flex flex-col items-start z-10">
+        <div className="z-10 flex flex-col items-start lg:col-span-7">
 
           {/* Top badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#22201E]/5 border border-[#22201E]/10 mb-6">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+          <motion.div
+            {...reveal}
+            initial={reveal.initial}
+            animate={reveal.animate}
+            transition={{
+              ...contentTransition,
+              delay: reduceMotion ? 0 : 0.1,
+            }}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#22201E]/10 bg-[#22201E]/5 px-3.5 py-1.5"
+          >
+            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-600" />
 
-            <span className="text-xs md:text-sm font-semibold tracking-wide uppercase text-[#22201E]/80">
+            <span className="text-xs font-semibold uppercase tracking-wide text-[#22201E]/80 md:text-sm">
               Top 1% UGC Creator Network
             </span>
-          </div>
+          </motion.div>
 
-          {/* Main heading - reduced by one size level */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.08] text-[#22201E] mb-6">
+          {/* Main heading */}
+          <motion.h1
+            initial={reveal.initial}
+            animate={reveal.animate}
+            transition={{
+              ...contentTransition,
+              delay: reduceMotion ? 0 : 0.2,
+            }}
+            className="mb-6 text-3xl font-bold leading-[1.08] tracking-tight text-[#22201E] sm:text-4xl md:text-5xl lg:text-6xl"
+          >
             Scale your brand with authentic{" "}
             <span className="relative inline-block text-[#22201E] underline decoration-[#22201E]/30 underline-offset-8">
               creator videos.
             </span>
-            
-          </h1>
+          </motion.h1>
 
-          {/* Description - reduced by 4px */}
-          <p className="text-[12px] sm:text-[14px] md:text-[16px] text-[#22201E]/80 max-w-2xl font-normal leading-relaxed mb-8 md:mb-10">
+          {/* Description */}
+          <motion.p
+            initial={reveal.initial}
+            animate={reveal.animate}
+            transition={{
+              ...contentTransition,
+              delay: reduceMotion ? 0 : 0.32,
+            }}
+            className="mb-8 max-w-2xl text-[12px] font-normal leading-relaxed text-[#22201E]/80 sm:text-[14px] md:mb-10 md:text-[16px]"
+          >
             Connect with high-converting creators, streamline content
             production, and launch high-impact ad creative tested to
             drive real ROAS across TikTok, Meta, and YouTube.
-          </p>
+          </motion.p>
 
           {/* CTA buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
-
-            {/* Primary CTA */}
+          <motion.div
+            initial={reveal.initial}
+            animate={reveal.animate}
+            transition={{
+              ...contentTransition,
+              delay: reduceMotion ? 0 : 0.44,
+            }}
+            className="flex w-full flex-col items-stretch gap-4 sm:w-auto sm:flex-row sm:items-center"
+          >
             <a
               href="#find-creators"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-xl text-base font-bold bg-[#22201E] text-[#E6E3D6] shadow-lg shadow-[#22201E]/15 hover:bg-[#22201E]/90 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-center"
+              className="inline-flex items-center justify-center rounded-xl bg-[#22201E] px-8 py-4 text-center text-base font-bold text-[#E6E3D6] shadow-lg shadow-[#22201E]/15 transition-all duration-300 hover:scale-[1.02] hover:bg-[#22201E]/90 active:scale-[0.98]"
             >
               <span>Find Your Creator</span>
               <ArrowRight />
             </a>
 
-            {/* Secondary CTA */}
             <a
               href="#try-free"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-xl text-base font-bold bg-transparent text-[#22201E] border-2 border-[#22201E] hover:bg-[#22201E]/5 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 text-center"
+              className="inline-flex items-center justify-center rounded-xl border-2 border-[#22201E] bg-transparent px-8 py-4 text-center text-base font-bold text-[#22201E] transition-all duration-300 hover:scale-[1.02] hover:bg-[#22201E]/5 active:scale-[0.98]"
             >
               Try It For Free
             </a>
-          </div>
+          </motion.div>
 
           {/* Social proof */}
-          <div className="mt-10 pt-8 border-t border-[#22201E]/10 flex flex-wrap items-center gap-6 sm:gap-10 text-xs sm:text-sm text-[#22201E]/70 font-medium">
-
+          <motion.div
+            initial={reveal.initial}
+            animate={reveal.animate}
+            transition={{
+              ...contentTransition,
+              delay: reduceMotion ? 0 : 0.56,
+            }}
+            className="mt-10 flex flex-wrap items-center gap-6 border-t border-[#22201E]/10 pt-8 text-xs font-medium text-[#22201E]/70 sm:gap-10 sm:text-sm"
+          >
             <div className="flex items-center gap-2">
               <CheckIcon />
               <span>Verified 48h turnaround</span>
@@ -179,43 +259,47 @@ function Hero() {
               <CheckIcon />
               <span>No upfront commitments</span>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Right column: Creator video cards */}
-        <div className="lg:col-span-5 relative flex items-center justify-center py-6 sm:py-10">
+        <div className="relative flex items-center justify-center py-6 sm:py-10 lg:col-span-5">
 
           {/* Background glow */}
-          <div className="absolute w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-[#22201E]/5 blur-3xl -z-10 pointer-events-none" />
+          <div className="pointer-events-none absolute -z-10 h-72 w-72 rounded-full bg-[#22201E]/5 blur-3xl sm:h-96 sm:w-96" />
 
           {/* Video cards container */}
-          <div className="relative w-full max-w-[340px] sm:max-w-[420px] md:max-w-[460px] h-[480px] sm:h-[540px] flex items-center justify-center">
+          <div className="relative flex h-[480px] w-full max-w-[340px] items-center justify-center sm:h-[540px] sm:max-w-[420px] md:max-w-[460px]">
 
-         
-{/* First creator video card */}
-<CreatorVideoCard
-  position="-left-2 sm:left-2 top-2 sm:top-4 rotate-[-7deg] hover:rotate-[-3deg] z-10"
-  category="Beauty & Skincare"
-  categoryColor="bg-rose-400"
-  creatorName="Elena Rostova"
-  creatorStats="UGC Creator • 182k"
-  performance="+3.8x ROAS"
-  performanceColor="text-emerald-300"
-  video="/videos/creator-beauty.mp4"
-/>
+            {/* First creator video card */}
+            <CreatorVideoCard
+              position="-left-2 top-2 z-10 sm:left-2 sm:top-4"
+              rotation="rotate-[-7deg] hover:rotate-[-3deg]"
+              category="Beauty & Skincare"
+              categoryColor="bg-rose-400"
+              creatorName="Elena Rostova"
+              creatorStats="UGC Creator • 182k"
+              performance="+3.8x ROAS"
+              performanceColor="text-emerald-300"
+              video="/videos/creator-beauty.mp4"
+              delay={0.3}
+              reduceMotion={reduceMotion}
+            />
 
-{/* Second creator video card */}
-<CreatorVideoCard
-  position="right-0 sm:right-2 bottom-2 sm:bottom-4 rotate-[7deg] hover:rotate-[3deg] z-20"
-  category="Fashion & Lifestyle"
-  categoryColor="bg-amber-400"
-  creatorName="Marcus & Claire"
-  creatorStats="Style & OOTD • 340k"
-  performance="Top Performing"
-  performanceColor="text-amber-300"
-  video="/videos/creator-fashion.mp4"
-/>
-
+            {/* Second creator video card */}
+            <CreatorVideoCard
+              position="right-0 bottom-2 z-20 sm:right-2 sm:bottom-4"
+              rotation="rotate-[7deg] hover:rotate-[3deg]"
+              category="Fashion & Lifestyle"
+              categoryColor="bg-amber-400"
+              creatorName="Marcus & Claire"
+              creatorStats="Style & OOTD • 340k"
+              performance="Top Performing"
+              performanceColor="text-amber-300"
+              video="/videos/creator-fashion.mp4"
+              delay={0.5}
+              reduceMotion={reduceMotion}
+            />
 
           </div>
         </div>
