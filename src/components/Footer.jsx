@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const footerGroups = [
   {
     title: "Explore",
@@ -32,13 +34,13 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 pb-8 pt-14 sm:px-6 sm:pt-16 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.35fr_2fr]">
           <div className="max-w-sm">
-            <a
+            <Link
               href="/"
               aria-label="KREVO home"
               className="inline-block text-3xl font-semibold tracking-[-0.06em]"
             >
               KREVO<span className="text-[#B8B4A9]">.</span>
-            </a>
+            </Link>
 
             <p className="mt-5 text-sm leading-7 text-[#B8B4A9]">
               Bringing brands and creators together to make meaningful,

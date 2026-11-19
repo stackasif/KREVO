@@ -212,7 +212,7 @@ const creatorVideos = [
 function CreatorCard({ creator }) {
   return (
     <article className="group/card relative aspect-[9/16] w-[180px] flex-shrink-0 overflow-hidden rounded-2xl border border-[#22201E]/10 bg-[#22201E] shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl sm:w-[200px] md:w-[220px] lg:w-[230px]">
-      
+
         <video
         className="absolute inset-0 h-full w-full object-cover"
         src={creator.video}
